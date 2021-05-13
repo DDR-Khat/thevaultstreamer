@@ -10,6 +10,7 @@ import iskallia.vault.item.ItemGiftBomb;
 import iskallia.vault.item.ItemGiftBomb.Variant;
 import iskallia.vault.item.ItemTraderCore;
 import iskallia.vault.item.ItemTraderCore.CoreType;
+import iskallia.vault.item.ItemVaultCrystal;
 import iskallia.vault.command.GiveBitsCommand;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -50,6 +51,12 @@ public class InternalCommand extends Command {
                     .then(Commands.argument("amount", IntegerArgumentType.integer())
                     .executes(context -> receivedBitDonation(context))))
         );
+
+        builder.then(
+            Commands.literal("raffle")
+                    .then(Commands.argument("actor", StringArgumentType.word())
+                    .executes(context -> raffle(context)))
+        );
     }
 
     private static int receivedSubGift(CommandContext<CommandSource> context) throws CommandSyntaxException {
@@ -80,6 +87,14 @@ public class InternalCommand extends Command {
         int amount = IntegerArgumentType.getInteger(context,"amount");
         CommandSource source = context.getSource();
         GiveBitsCommand.dropBits(context.getSource().asPlayer(), amount);
+        return 0;
+    }
+    
+    private static int raffle(CommandContext<CommandSource> context) throws CommandSyntaxException {
+        String actor = StringArgumentType.getString(context, "actor");
+        CommandSource source = context.getSource();
+        ItemStack item = ItemVaultCrystal.getCrystalWithBoss(actor);
+        EntityHelper.giveItem(context.getSource().asPlayer(), item);
         return 0;
     }
 
