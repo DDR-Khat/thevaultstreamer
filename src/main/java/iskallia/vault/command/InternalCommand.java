@@ -5,16 +5,16 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import iskallia.vault.util.EntityHelper;
+import iskallia.vault.command.GiveBitsCommand;
+import iskallia.vault.item.CrystalData;
 import iskallia.vault.item.ItemGiftBomb;
 import iskallia.vault.item.ItemGiftBomb.Variant;
 import iskallia.vault.item.ItemTraderCore;
 import iskallia.vault.item.ItemTraderCore.CoreType;
 import iskallia.vault.item.ItemVaultCrystal;
-import iskallia.vault.command.GiveBitsCommand;
+import iskallia.vault.util.EntityHelper;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 
 
@@ -94,6 +94,7 @@ public class InternalCommand extends Command {
         String actor = StringArgumentType.getString(context, "actor");
         CommandSource source = context.getSource();
         ItemStack item = ItemVaultCrystal.getCrystalWithBoss(actor);
+        ItemVaultCrystal.getData(item).addModifier("Raffle", CrystalData.Modifier.Operation.ADD,1.0F);
         EntityHelper.giveItem(context.getSource().asPlayer(), item);
         return 0;
     }
