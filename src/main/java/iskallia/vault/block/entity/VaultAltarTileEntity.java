@@ -8,6 +8,10 @@ import iskallia.vault.init.ModItems;
 import iskallia.vault.item.ItemVaultCrystal;
 import iskallia.vault.util.VectorHelper;
 import iskallia.vault.world.data.PlayerVaultAltarData;
+import java.util.List;
+import java.util.UUID;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -29,10 +33,6 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.UUID;
 
 public class VaultAltarTileEntity extends TileEntity implements ITickableTileEntity {
 
@@ -262,17 +262,22 @@ public class VaultAltarTileEntity extends TileEntity implements ITickableTileEnt
                     List<RequiredItem> items = recipe.getRequiredItems();
                     for (RequiredItem item : items) {
                         if (item.reachedAmountRequired()) {
-                            return stack;
+                            continue;
                         }
                         if (item.isItemEqual(stack)) {
                             int amount = stack.getCount();
                             int excess = item.getRemainder(amount);
                             if (excess > 0) {
-                                item.setCurrentAmount(item.getAmountRequired());
-                                stack.setCount(excess);
+                                if (!simulate) {
+                                    item.setCurrentAmount(item.getAmountRequired());
+                                    PlayerVaultAltarData.get((ServerWorld) world).markDirty();
+                                }
                                 return ItemHandlerHelper.copyStackWithSize(stack, excess);
                             } else {
-                                item.addAmount(stack.getCount());
+                                if (!simulate) {
+                                    item.addAmount(stack.getCount());
+                                    PlayerVaultAltarData.get((ServerWorld) world).markDirty();
+                                }
                                 return ItemStack.EMPTY;
                             }
                         }
