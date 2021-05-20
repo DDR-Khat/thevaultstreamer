@@ -3,6 +3,11 @@ package iskallia.vault.config;
 import com.google.gson.annotations.Expose;
 import iskallia.vault.Vault;
 import iskallia.vault.altar.RequiredItem;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,11 +18,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 public class VaultAltarConfig extends Config {
 
@@ -82,9 +82,9 @@ public class VaultAltarConfig extends Config {
 
     public List<RequiredItem> generateItems(ServerWorld world, PlayerEntity player) {
 
-        // return getRequiredItemsFromJson();
+        return getRequiredItemsFromJson();
 
-        return getRequiredItemsFromTables(world, player);
+        // return getRequiredItemsFromTables(world, player);
     }
 
     private List<RequiredItem> getRequiredItemsFromJson() {
