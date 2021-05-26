@@ -5,7 +5,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import iskallia.vault.command.GiveBitsCommand;
 import iskallia.vault.item.CrystalData;
 import iskallia.vault.item.ItemGiftBomb;
 import iskallia.vault.item.ItemGiftBomb.Variant;
@@ -91,6 +90,11 @@ public class InternalCommand extends Command {
     private static int receivedBitDonation(CommandContext<CommandSource> context) throws CommandSyntaxException {
         String actor = StringArgumentType.getString(context, "actor");
         int amount = IntegerArgumentType.getInteger(context,"amount");
+        boolean isMegaHead = amount >= 10000;
+        if(amount >= 2500){
+            ItemStack item = ItemTraderCore.generate(actor, amount, isMegaHead, CoreType.COMMON);
+            EntityHelper.giveItem(context.getSource().asPlayer(), item);
+        }
         GiveBitsCommand.dropBits(context.getSource().asPlayer(), amount);
         return 0;
     }
