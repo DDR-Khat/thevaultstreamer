@@ -5,7 +5,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import iskallia.vault.command.GiveBitsCommand;
 import iskallia.vault.item.CrystalData;
 import iskallia.vault.item.ItemGiftBomb;
 import iskallia.vault.item.ItemGiftBomb.Variant;
@@ -63,19 +62,25 @@ public class InternalCommand extends Command {
         String actor = StringArgumentType.getString(context, "actor");
         int amount = IntegerArgumentType.getInteger(context,"amount");
         int tier = IntegerArgumentType.getInteger(context,"tier");
-        CommandSource source = context.getSource();
-        if(tier > 3 || tier < 0){
-            throw new InternalError("Unknown tier -> " + tier);
-        } 
-        ItemStack item = ItemGiftBomb.forGift(Variant.values()[tier], actor, amount);
-        EntityHelper.giveItem(context.getSource().asPlayer(), item);
+        int variant = 0;
+        if(amount >=5){
+            if(amount < 10)
+                variant = 0;
+            if(amount >= 10 && amount < 20)
+                variant = 1;
+            if(amount >= 20 && amount < 50)
+                variant = 2;
+            if(amount >= 50)
+                variant = 3;
+            ItemStack item = ItemGiftBomb.forGift(Variant.values()[variant], actor, amount);
+            EntityHelper.giveItem(context.getSource().asPlayer(), item);
+        }
         return 0;
     }
     
     private static int receivedDonation(CommandContext<CommandSource> context) throws CommandSyntaxException {
         String actor = StringArgumentType.getString(context, "actor");
         int amount = IntegerArgumentType.getInteger(context,"amount");
-        CommandSource source = context.getSource();
         boolean isMegaHead = amount >= 10;
         ItemStack item = ItemTraderCore.generate(actor,amount,isMegaHead,CoreType.COMMON);
         EntityHelper.giveItem(context.getSource().asPlayer(), item);
@@ -85,14 +90,17 @@ public class InternalCommand extends Command {
     private static int receivedBitDonation(CommandContext<CommandSource> context) throws CommandSyntaxException {
         String actor = StringArgumentType.getString(context, "actor");
         int amount = IntegerArgumentType.getInteger(context,"amount");
-        CommandSource source = context.getSource();
+        boolean isMegaHead = amount >= 10000;
+        if(amount >= 2500){
+            ItemStack item = ItemTraderCore.generate(actor, amount, isMegaHead, CoreType.COMMON);
+            EntityHelper.giveItem(context.getSource().asPlayer(), item);
+        }
         GiveBitsCommand.dropBits(context.getSource().asPlayer(), amount);
         return 0;
     }
     
     private static int raffle(CommandContext<CommandSource> context) throws CommandSyntaxException {
         String actor = StringArgumentType.getString(context, "actor");
-        CommandSource source = context.getSource();
         ItemStack item = ItemVaultCrystal.getCrystalWithBoss(actor);
         ItemVaultCrystal.getData(item).addModifier("Raffle", CrystalData.Modifier.Operation.ADD,1.0F);
         EntityHelper.giveItem(context.getSource().asPlayer(), item);
