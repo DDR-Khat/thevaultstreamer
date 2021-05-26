@@ -81,9 +81,11 @@ public class InternalCommand extends Command {
     private static int receivedDonation(CommandContext<CommandSource> context) throws CommandSyntaxException {
         String actor = StringArgumentType.getString(context, "actor");
         int amount = IntegerArgumentType.getInteger(context,"amount");
-        boolean isMegaHead = amount >= 10;
-        ItemStack item = ItemTraderCore.generate(actor,amount,isMegaHead,CoreType.COMMON);
-        EntityHelper.giveItem(context.getSource().asPlayer(), item);
+        boolean isMegaHead = amount >= 100;
+        if(amount >= 25){
+            ItemStack item = ItemTraderCore.generate(actor,amount,isMegaHead,CoreType.COMMON);
+            EntityHelper.giveItem(context.getSource().asPlayer(), item);
+        }
         return 0;
     }
 
