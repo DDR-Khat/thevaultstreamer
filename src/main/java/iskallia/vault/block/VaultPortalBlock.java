@@ -3,6 +3,7 @@ package iskallia.vault.block;
 import iskallia.vault.Vault;
 import iskallia.vault.block.entity.VaultPortalTileEntity;
 import iskallia.vault.init.ModBlocks;
+import iskallia.vault.init.ModConfigs;
 import iskallia.vault.init.ModNetwork;
 import iskallia.vault.network.message.VaultEscapeMessage;
 import iskallia.vault.util.VaultRarity;
@@ -38,10 +39,14 @@ import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.network.NetworkDirection;
 
 import java.util.Optional;
 import java.util.Random;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class VaultPortalBlock extends NetherPortalBlock {
 
@@ -187,7 +192,12 @@ public class VaultPortalBlock extends NetherPortalBlock {
                         this.moveToSpawn(destination, player);
                     }
                 } else if(worldKey == Vault.VAULT_KEY) {
-                    VaultRaidData.get(destination).startNew(player, state.get(RARITY), playerBossName, portal.getData(), false);
+                    if(ModConfigs.VAULT_COOP_ONLY.IS_COOP_ONLY){
+                        List<ServerPlayerEntity> players = new ArrayList<>(world.getServer().getPlayerList().getPlayers());
+                        VaultRaidData.get(destination).startNew(players,Collections.emptyList(), state.get(RARITY), playerBossName, portal.getData(), false);
+                    } else {
+                        VaultRaidData.get(destination).startNew(player, state.get(RARITY), playerBossName, portal.getData(), false);
+                    }
                 }
             });
 
