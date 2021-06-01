@@ -295,6 +295,7 @@ public class EntityEvents {
 		VaultRaid raid = VaultRaidData.get((ServerWorld)event.getEntity().world).getAt(player.getPosition());
 		if(raid == null)return;
 		raid.finished = true;
+        raid.ticksLeft=0;
 	}
 
 	@SubscribeEvent
