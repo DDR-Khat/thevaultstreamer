@@ -83,7 +83,7 @@ public class ItemVaultFruit extends Item {
                 VaultRaid raid = VaultRaidData.get((ServerWorld) worldIn).getActiveFor(player);
                 raid.ticksLeft += getExtraVaultTicks();
                 raid.sTickLeft += this.getExtraVaultTicks();
-                raid.syncTicksLeft(worldIn);
+                raid.syncTicksLeft(worldIn.getServer());
                 player.attackEntityFrom(this.damageSource, 6);
 
                 worldIn.playSound(null,
@@ -136,7 +136,7 @@ public class ItemVaultFruit extends Item {
                 VaultRaid raid = VaultRaidData.get((ServerWorld) worldIn).getActiveFor(player);
                 raid.ticksLeft += getExtraVaultTicks();
                 raid.sTickLeft += this.getExtraVaultTicks();
-                raid.syncTicksLeft(worldIn);
+                raid.syncTicksLeft(worldIn.getServer());
                 player.attackEntityFrom(this.damageSource, 10);
 
                 worldIn.playSound(null,
@@ -189,7 +189,7 @@ public class ItemVaultFruit extends Item {
                 VaultRaid raid = VaultRaidData.get((ServerWorld) worldIn).getActiveFor(player);
                 raid.ticksLeft += getExtraVaultTicks();
                 raid.sTickLeft += this.getExtraVaultTicks();
-                raid.syncTicksLeft(worldIn);
+                raid.syncTicksLeft(worldIn.getServer());
                 player.attackEntityFrom(this.damageSource, MathUtilities.getRandomInt(10, 20));
 
                 if (MathUtilities.randomFloat(0, 100) <= 50) {
@@ -249,7 +249,7 @@ public class ItemVaultFruit extends Item {
                 VaultRaid raid = VaultRaidData.get((ServerWorld) worldIn).getActiveFor(player);
                 raid.ticksLeft += getExtraVaultTicks();
                 raid.sTickLeft += this.getExtraVaultTicks();
-                raid.syncTicksLeft(worldIn);
+                raid.syncTicksLeft(worldIn.getServer());
                 worldIn.playSound(null,
                         player.getPosX(),
                         player.getPosY(),

@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.server.ServerWorld;
-
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,11 +38,11 @@ public class VaultSpawner {
 	public void tick(ServerPlayerEntity player) {
 		if(player.world.getDimensionKey() != Vault.VAULT_KEY)return;
 		if(this.raid.ticksLeft + 15 * 20 > this.raid.sTickLeft)return;
-		List<UUID> playerUUIDs = this.raid.playerIds();
-		Boolean removeMob = true;
+		List<UUID> playerUuids = this.raid.getPlayerIds();
 		this.mobs.removeIf(entity -> {
-			for(UUID playerUUID:playerUUIDs){
-				ServerPlayerEntity splayer = this.getServer().getPlayerList().getPlayerByUUID(playerUUID);
+			Boolean removeMob = true;
+			for(UUID playerUUID:playerUuids){
+				ServerPlayerEntity splayer = player.getServer().getPlayerList().getPlayerByUUID(playerUUID);
 				if(entity.getDistanceSq(splayer) <= 24 * 24) {
 					removeMob = false;
 				}
