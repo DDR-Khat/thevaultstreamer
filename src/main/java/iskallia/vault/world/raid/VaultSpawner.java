@@ -38,13 +38,19 @@ public class VaultSpawner {
 	public void tick(ServerPlayerEntity player) {
 		if(player.world.getDimensionKey() != Vault.VAULT_KEY)return;
 		if(this.raid.ticksLeft + 15 * 20 > this.raid.sTickLeft)return;
-
+		List<UUID> playerUUIDs = this.raid.playerIds();
+		Boolean removeMob = true;
 		this.mobs.removeIf(entity -> {
-			if(entity.getDistanceSq(player) > 24 * 24) {
+			for(UUID playerUUID:playerUUIDs){
+				ServerPlayerEntity splayer = this.getServer().getPlayerByUUID(playerUUID);
+				if(entity.getDistanceSq(splayer) <= 24 * 24) {
+					removeMob = false;
+				}
+			}
+			if(removeMob){
 				entity.remove();
 				return true;
 			}
-
 			return false;
 		});
 
