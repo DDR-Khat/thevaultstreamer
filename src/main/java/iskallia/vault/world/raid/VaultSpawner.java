@@ -42,7 +42,7 @@ public class VaultSpawner {
 		Boolean removeMob = true;
 		this.mobs.removeIf(entity -> {
 			for(UUID playerUUID:playerUUIDs){
-				ServerPlayerEntity splayer = this.getServer().getPlayerByUUID(playerUUID);
+				ServerPlayerEntity splayer = this.getServer().getPlayerList().getPlayerByUUID(playerUUID);
 				if(entity.getDistanceSq(splayer) <= 24 * 24) {
 					removeMob = false;
 				}
