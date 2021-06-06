@@ -47,6 +47,9 @@ import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import static iskallia.vault.Vault.raiders;
+
+import static iskallia.vault.Vault.isVanillaDim;
 
 public class VaultPortalBlock extends NetherPortalBlock {
 
@@ -116,7 +119,7 @@ public class VaultPortalBlock extends NetherPortalBlock {
 
         //if in overworld, allow the portal to break when frame is broken. like a nether portal.
         if (world != null) {
-            if (world.getDimensionKey() == World.OVERWORLD) {
+            if (isVanillaDim(world.getDimensionKey())) {
                 Direction.Axis direction$axis = facing.getAxis();
                 Direction.Axis direction$axis1 = stateIn.get(AXIS);
                 boolean flag = direction$axis1 != direction$axis && direction$axis.isHorizontal();
@@ -154,7 +157,7 @@ public class VaultPortalBlock extends NetherPortalBlock {
             }
 
             world.getServer().runAsync(() -> {
-                if (worldKey == World.OVERWORLD) {
+                if (isVanillaDim(worldKey)) {
                     ServerPlayerEntity playerEntity = (ServerPlayerEntity) entity;
 
                     VaultRaid raid = VaultRaidData.get(destination).getActiveFor(playerEntity);
@@ -195,6 +198,7 @@ public class VaultPortalBlock extends NetherPortalBlock {
                     if(ModConfigs.VAULT_COOP_ONLY.IS_COOP_ONLY){
                         List<ServerPlayerEntity> players = new ArrayList<>(world.getServer().getPlayerList().getPlayers());
                         players.removeIf(seek -> seek.getServerWorld()!=player.getServerWorld());
+                        players.removeIf(seek -> (seek.getTeam()!=raiders)&&(seek!=player));
                         VaultRaidData.get(destination).startNew(players,Collections.emptyList(), state.get(RARITY), playerBossName, portal.getData(), false);
                     } else {
                         VaultRaidData.get(destination).startNew(player, state.get(RARITY), playerBossName, portal.getData(), false);

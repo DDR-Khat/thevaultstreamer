@@ -238,6 +238,7 @@
   "entity.the_vault.blue_blaze": "Soul Blaze",
   "entity.the_vault.vault_guardian": "Vault Guardian",
   "death.attack.vaultFailed": "%s got swallowed by the Vault Timer",
+  "death.attack.vaultFailed.player": "%s was swallowed because %s perished in the Vault",
   "death.attack.bitter_lemon": "%s got paralyzed by Bitter Lemon",
   "death.attack.sour_orange": "%s got paralyzed by Sour Orange",
   "death.attack.mystic_pear": "%s got paralyzed by Mystic Pear",

@@ -45,13 +45,13 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.network.NetworkDirection;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static iskallia.vault.Vault.isVanillaDim;
+import static iskallia.vault.Vault.raiders;
 
 public class VaultRaid implements INBTSerializable<CompoundNBT> {
 
@@ -184,7 +184,7 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
             this.runForPlayers(world.getServer(), player -> {
                 if (this.ticksLeft + 20 < this.sTickLeft
                         && player.world.getDimensionKey() != Vault.VAULT_KEY) {
-                    if (player.world.getDimensionKey() == World.OVERWORLD) {
+                    if (isVanillaDim(player.world.getDimensionKey())) {
                         //This triggers when you go through the portal or TP out.
                         this.onFinishRaid(world);
                     } else {
@@ -202,30 +202,39 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
     private void onFinishRaid(ServerWorld world) {
         this.finished = true;
 
+        Scoreboard serverBoard = world.getServer().getScoreboard();
+
         this.runForAll(world.getServer(), player -> {
-            float range;
-            float tnl=0;
-            if(ModConfigs.VAULT_COOP_ONLY.VAULT_EXP_EQUAL) {
-                range = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MAX - ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN;
-                tnl = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN + world.rand.nextFloat() * range;
-            }
-            if (!player.removed && player.world.getDimensionKey() == Vault.VAULT_KEY) {
-                this.teleportToStart(world, player);
-            }
-
-            this.finish(world, player.getUniqueID());
-
-            List<UUID> list = this.spectators.stream().map(spectator -> spectator.uuid).collect(Collectors.toList());
-
-            if (!player.removed && !list.contains(player.getUniqueID())) {
-                if(!ModConfigs.VAULT_COOP_ONLY.VAULT_EXP_EQUAL) {
+            if(player.getHealth()>=1) {
+                float range;
+                float tnl = 0;
+                if (ModConfigs.VAULT_COOP_ONLY.VAULT_EXP_EQUAL) {
                     range = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MAX - ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN;
                     tnl = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN + world.rand.nextFloat() * range;
                 }
+                if (!player.removed && player.world.getDimensionKey() == Vault.VAULT_KEY) {
+                    this.teleportToStart(world, player);
+                }
 
-                PlayerVaultStatsData statsData = PlayerVaultStatsData.get(world);
-                PlayerVaultStats stats = statsData.getVaultStats(player);
-                statsData.addVaultExp(player, (int) (stats.getTnl() * tnl));
+                this.finish(world, player.getUniqueID());
+
+                List<UUID> list = this.spectators.stream().map(spectator -> spectator.uuid).collect(Collectors.toList());
+
+                if (!player.removed && !list.contains(player.getUniqueID())) {
+                    if (!ModConfigs.VAULT_COOP_ONLY.VAULT_EXP_EQUAL) {
+                        range = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MAX - ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN;
+                        tnl = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN + world.rand.nextFloat() * range;
+                    }
+
+                    PlayerVaultStatsData statsData = PlayerVaultStatsData.get(world);
+                    PlayerVaultStats stats = statsData.getVaultStats(player);
+                    statsData.addVaultExp(player, (int) (stats.getTnl() * tnl));
+                }
+            }
+            if(raiders!=null&&raiders.getName().equals("hunters"))
+            {
+                serverBoard.removeTeam(raiders);
+                serverBoard.createTeam("hunters");
             }
         });
 
