@@ -21,6 +21,8 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Optional;
 
+import static iskallia.vault.Vault.isVanillaDim;
+
 public class ItemVaultCrystal extends Item {
 
     private VaultRarity vaultRarity;
@@ -67,7 +69,7 @@ public class ItemVaultCrystal extends Item {
 
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
-        if(context.getWorld().isRemote)return super.onItemUse(context);
+        if(context.getWorld().isRemote||!isVanillaDim(context.getWorld().getDimensionKey()))return super.onItemUse(context);
 
         ItemStack stack = context.getPlayer().getHeldItemMainhand();
         Item item = stack.getItem();
