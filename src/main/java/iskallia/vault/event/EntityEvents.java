@@ -46,6 +46,8 @@ import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -297,6 +299,10 @@ public class EntityEvents {
         Vector3d position = player.getPositionVec();
 		player.getServerWorld().playSound(null, position.x, position.y, position.z,
                 ModSounds.TIMER_KILL_SFX, SoundCategory.MASTER, 0.75F, 1F);
+
+        List<ServerPlayerEntity> raiders = new ArrayList<>(player.getServerWorld().getPlayers());
+        raiders.removeIf(seek -> (seek == player)||seek.getHealth()<=0.0F);
+        for(ServerPlayerEntity seek: raiders) if(seek!=player) seek.attackEntityFrom(new DamageSource("vaultFailed").setDamageBypassesArmor().setDamageAllowedInCreativeMode(), 100000000.0F);
 
 		VaultRaid raid = VaultRaidData.get((ServerWorld)event.getEntity().world).getAt(player.getPosition());
 		if(raid == null)return;
