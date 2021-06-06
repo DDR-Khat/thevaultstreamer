@@ -45,15 +45,13 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.network.NetworkDirection;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static iskallia.vault.Vault.isVanillaDim;
+import static iskallia.vault.Vault.raiders;
 
 public class VaultRaid implements INBTSerializable<CompoundNBT> {
 
@@ -204,6 +202,8 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
     private void onFinishRaid(ServerWorld world) {
         this.finished = true;
 
+        Scoreboard serverBoard = world.getServer().getScoreboard();
+
         this.runForAll(world.getServer(), player -> {
             if(player.getHealth()>=1) {
                 float range;
@@ -230,6 +230,11 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
                     PlayerVaultStats stats = statsData.getVaultStats(player);
                     statsData.addVaultExp(player, (int) (stats.getTnl() * tnl));
                 }
+            }
+            if(raiders!=null&&raiders.getName().equals("hunters"))
+            {
+                serverBoard.removeTeam(raiders);
+                serverBoard.createTeam("hunters");
             }
         });
 
