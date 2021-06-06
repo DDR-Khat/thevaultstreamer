@@ -206,10 +206,16 @@ public class EntityEvents {
 				if(count != 0) {
 					stacks.add(new ItemStack(ModItems.ETERNAL_SOUL, world.rand.nextInt(count) + 1));
 				}
-
-				ItemStack crate = VaultCrateBlock.getCrateWithLoot(ModBlocks.VAULT_CRATE, stacks);
-
-				event.getEntity().entityDropItem(crate);
+				if(ModConfigs.VAULT_COOP_ONLY.EXTRA_BOSS_CRATES) {
+                    ItemStack crate = VaultCrateBlock.getCrateWithLoot(ModBlocks.VAULT_CRATE, stacks);
+                    event.getEntity().entityDropItem(crate);
+                }
+				else {
+				    if(event.getSource().getTrueSource()==player) {
+                        ItemStack crate = VaultCrateBlock.getCrateWithLoot(ModBlocks.VAULT_CRATE, stacks);
+                        event.getEntity().entityDropItem(crate);
+                    }
+                }
 
 				FireworkRocketEntity fireworks = new FireworkRocketEntity(world, event.getEntity().getPosX(),
 						event.getEntity().getPosY(), event.getEntity().getPosZ(), new ItemStack(Items.FIREWORK_ROCKET));
