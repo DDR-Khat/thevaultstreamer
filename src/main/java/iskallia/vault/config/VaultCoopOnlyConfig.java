@@ -4,10 +4,9 @@ import com.google.gson.annotations.Expose;
 
 public class VaultCoopOnlyConfig extends Config{
     
-    @Expose
-    public Boolean IS_COOP_ONLY;
-    public Boolean VAULT_EXP_EQUAL;
-    public Boolean EXTRA_BOSS_CRATES;
+    @Expose public Boolean IS_COOP_ONLY;
+    @Expose public Boolean VAULT_EXP_EQUAL;
+    @Expose public Boolean EXTRA_BOSS_CRATES;
     
     public String getName() {
         return "vault_coop_only";
@@ -21,6 +20,8 @@ public class VaultCoopOnlyConfig extends Config{
 
     public void reset(){
         this.IS_COOP_ONLY=false;
+        this.VAULT_EXP_EQUAL=false;
+        this.EXTRA_BOSS_CRATES=false;
     }
     public void resetXPShare(){
         this.VAULT_EXP_EQUAL=false;
