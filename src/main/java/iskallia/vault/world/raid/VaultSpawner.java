@@ -40,18 +40,20 @@ public class VaultSpawner {
 		if(this.raid.ticksLeft + 15 * 20 > this.raid.sTickLeft)return;
 		List<UUID> playerUuids = this.raid.getPlayerIds();
 		this.mobs.removeIf(entity -> {
-			Boolean removeMob = true;
-			for(UUID playerUUID:playerUuids){
-				ServerPlayerEntity splayer = player.getServer().getPlayerList().getPlayerByUUID(playerUUID);
-				if(entity.getDistanceSq(splayer) <= 24 * 24) {
-					removeMob = false;
+			if(!entity.removed) {
+				Boolean removeMob = true;
+				for (UUID playerUUID : playerUuids) {
+					ServerPlayerEntity splayer = player.getServer().getPlayerList().getPlayerByUUID(playerUUID);
+					if (splayer != null && entity.getDistanceSq(splayer) <= 24 * 24) {
+						removeMob = false;
+					}
+				}
+				if (removeMob) {
+					entity.remove();
+					return true;
 				}
 			}
-			if(removeMob){
-				entity.remove();
-				return true;
-			}
-			return false;
+				return false;
 		});
 
 		if(this.mobs.size() >= this.getMaxMobs())return;
