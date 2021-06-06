@@ -26,6 +26,6 @@ public class VaultCoopOnlyConfig extends Config{
         this.VAULT_EXP_EQUAL=false;
     }
     public void resetExtraCrate(){
-        this.VAULT_EXP_EQUAL=false;
+        this.EXTRA_BOSS_CRATES=false;
     }
 }
