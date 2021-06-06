@@ -205,29 +205,31 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
         this.finished = true;
 
         this.runForAll(world.getServer(), player -> {
-            float range;
-            float tnl=0;
-            if(ModConfigs.VAULT_COOP_ONLY.VAULT_EXP_EQUAL) {
-                range = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MAX - ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN;
-                tnl = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN + world.rand.nextFloat() * range;
-            }
-            if (!player.removed && player.world.getDimensionKey() == Vault.VAULT_KEY) {
-                this.teleportToStart(world, player);
-            }
-
-            this.finish(world, player.getUniqueID());
-
-            List<UUID> list = this.spectators.stream().map(spectator -> spectator.uuid).collect(Collectors.toList());
-
-            if (!player.removed && !list.contains(player.getUniqueID())) {
-                if(!ModConfigs.VAULT_COOP_ONLY.VAULT_EXP_EQUAL) {
+            if(player.getHealth()>=1) {
+                float range;
+                float tnl = 0;
+                if (ModConfigs.VAULT_COOP_ONLY.VAULT_EXP_EQUAL) {
                     range = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MAX - ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN;
                     tnl = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN + world.rand.nextFloat() * range;
                 }
+                if (!player.removed && player.world.getDimensionKey() == Vault.VAULT_KEY) {
+                    this.teleportToStart(world, player);
+                }
 
-                PlayerVaultStatsData statsData = PlayerVaultStatsData.get(world);
-                PlayerVaultStats stats = statsData.getVaultStats(player);
-                statsData.addVaultExp(player, (int) (stats.getTnl() * tnl));
+                this.finish(world, player.getUniqueID());
+
+                List<UUID> list = this.spectators.stream().map(spectator -> spectator.uuid).collect(Collectors.toList());
+
+                if (!player.removed && !list.contains(player.getUniqueID())) {
+                    if (!ModConfigs.VAULT_COOP_ONLY.VAULT_EXP_EQUAL) {
+                        range = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MAX - ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN;
+                        tnl = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN + world.rand.nextFloat() * range;
+                    }
+
+                    PlayerVaultStatsData statsData = PlayerVaultStatsData.get(world);
+                    PlayerVaultStats stats = statsData.getVaultStats(player);
+                    statsData.addVaultExp(player, (int) (stats.getTnl() * tnl));
+                }
             }
         });
 
