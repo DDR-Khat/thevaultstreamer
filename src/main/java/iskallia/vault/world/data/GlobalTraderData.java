@@ -19,6 +19,8 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import static iskallia.vault.Vault.isVanillaDim;
+
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class GlobalTraderData extends WorldSavedData {
@@ -69,7 +71,7 @@ public class GlobalTraderData extends WorldSavedData {
 
     @SubscribeEvent
     public static void onTick(TickEvent.WorldTickEvent event) {
-        if (event.phase == TickEvent.Phase.END || event.world.getDimensionKey() != World.OVERWORLD || event.side.isClient())
+        if (event.phase == TickEvent.Phase.END || !isVanillaDim(event.world.getDimensionKey()) || event.side.isClient())
             return;
 
         long time = Instant.now().getEpochSecond();

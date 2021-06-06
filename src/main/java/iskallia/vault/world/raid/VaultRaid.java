@@ -53,6 +53,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static iskallia.vault.Vault.isVanillaDim;
+
 public class VaultRaid implements INBTSerializable<CompoundNBT> {
 
     public static final PortalPlacer PORTAL_PLACER = new PortalPlacer((pos, random, facing) -> {
@@ -184,7 +186,7 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
             this.runForPlayers(world.getServer(), player -> {
                 if (this.ticksLeft + 20 < this.sTickLeft
                         && player.world.getDimensionKey() != Vault.VAULT_KEY) {
-                    if (player.world.getDimensionKey() == World.OVERWORLD) {
+                    if (isVanillaDim(player.world.getDimensionKey())) {
                         //This triggers when you go through the portal or TP out.
                         this.onFinishRaid(world);
                     } else {

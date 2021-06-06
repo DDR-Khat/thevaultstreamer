@@ -68,4 +68,8 @@ public class Vault {
         return new ResourceLocation(MOD_ID, name);
     }
 
+    public static boolean isVanillaDim(RegistryKey<World> world){
+        return (world == World.OVERWORLD) || (world == World.THE_NETHER) || (world == World.THE_END);
+    }
+
 }
