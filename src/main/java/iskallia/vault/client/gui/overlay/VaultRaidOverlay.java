@@ -198,7 +198,8 @@ public class VaultRaidOverlay {
 		long seconds = (remainingTicks / 20) % 60;
 		long minutes = ((remainingTicks / 20) / 60) % 60;
 		long hrs = (((remainingTicks / 20) / 60) / 60) % 60;
-		return String.format("%02d:%02d:%02d", hrs, minutes, seconds);
+		if(hrs>0) return String.format("%d:%02d:%02d", hrs, minutes, seconds);
+		else return String.format("%02d:%02d", minutes, seconds);
 	}
 
 }
