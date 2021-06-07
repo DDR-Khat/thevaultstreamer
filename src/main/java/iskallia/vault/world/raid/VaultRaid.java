@@ -82,6 +82,7 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
     public static final int REGION_SIZE = 1 << 11;
 
     public UUID owner;
+    public List<ServerPlayerEntity> players;
     public List<UUID> playerIds;
     public List<UUID> spectatorIds; //Only used initially.
     public List<Spectator> spectators = new ArrayList<>();
@@ -113,6 +114,7 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
 
     public VaultRaid(List<ServerPlayerEntity> players, List<ServerPlayerEntity> spectators,
                      MutableBoundingBox box, int level, int rarity, String playerBossName, UUID owner) {
+        this.players = players;
         this.playerIds = players.stream().map(Entity::getUniqueID).collect(Collectors.toList());
         this.spectatorIds = spectators.stream().map(Entity::getUniqueID).collect(Collectors.toList());
         this.box = box;
