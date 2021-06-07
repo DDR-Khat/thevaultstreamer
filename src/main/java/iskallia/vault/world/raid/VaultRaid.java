@@ -81,6 +81,7 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
 
     public static final int REGION_SIZE = 1 << 11;
 
+    public UUID owner;
     public List<UUID> playerIds;
     public List<UUID> spectatorIds; //Only used initially.
     public List<Spectator> spectators = new ArrayList<>();
@@ -102,7 +103,7 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
     public VaultSpawner spawner = new VaultSpawner(this);
     public VaultModifiers modifiers = new VaultModifiers(this);
     public boolean finished = false;
-    public int timer = 20 * 60;
+    //public int timer = 20 * 60;
 
     public boolean isFinalVault; //This is disgusting but...
 
@@ -111,13 +112,14 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
     }
 
     public VaultRaid(List<ServerPlayerEntity> players, List<ServerPlayerEntity> spectators,
-                     MutableBoundingBox box, int level, int rarity, String playerBossName) {
+                     MutableBoundingBox box, int level, int rarity, String playerBossName, UUID owner) {
         this.playerIds = players.stream().map(Entity::getUniqueID).collect(Collectors.toList());
         this.spectatorIds = spectators.stream().map(Entity::getUniqueID).collect(Collectors.toList());
         this.box = box;
         this.level = level;
         this.rarity = rarity;
         this.playerBossName = playerBossName;
+        this.owner = owner;
 
         this.sTickLeft = ModConfigs.VAULT_TIMER.getForLevel(this.level);
         this.ticksLeft = this.sTickLeft;
@@ -151,16 +153,18 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
             this.ticksLeft = 20 * 20;
         }
 
+        //this.runForPlayers(world.getServer(),player -> {if(this.owner.equals(player.getUniqueID())) this.ticksLeft--;});
+
         if (this.playerIds.size() == 1) {
             this.runForPlayers(world.getServer(), player -> {
 
                 this.modifiers.tick(world, player);
-                this.ticksLeft--;
+                //this.ticksLeft--;
                 this.syncTicksLeft(world.getServer());
 
             });
         } else {
-            this.ticksLeft--;
+            //this.ticksLeft--;
             this.syncTicksLeft(world.getServer());
         }
 
@@ -196,7 +200,7 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
             });
         }
 
-        this.timer--;
+        //this.timer--;
     }
 
     private void onFinishRaid(ServerWorld world) {
@@ -448,7 +452,11 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
 
             long seconds = (this.ticksLeft / 20) % 60;
             long minutes = ((this.ticksLeft / 20) / 60) % 60;
-            String duration = String.format("%02d:%02d", minutes, seconds);
+            long hrs = (((this.ticksLeft / 20) / 60) / 60) % 60;
+            //String duration = String.format("%02d:%02d:%02d", hrs, minutes, seconds);
+            String duration="";
+            if(hrs>0) duration = String.format("%d:%02d:%02d", hrs, minutes, seconds);
+            else duration = String.format("%02d:%02d", minutes, seconds);
 
             StringTextComponent title = new StringTextComponent("The Vault");
             title.setStyle(Style.EMPTY.setColor(Color.fromInt(0x00_ddd01e)));

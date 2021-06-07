@@ -310,14 +310,13 @@ public class EntityEvents {
             serverBoard.removeTeam(raiders);
             serverBoard.createTeam("hunters");
         }
+        VaultRaid raid = VaultRaidData.get(player.getServerWorld()).getActiveFor(player);
         List<ServerPlayerEntity> raiders = new ArrayList<>(player.getServerWorld().getPlayers());
-        raiders.removeIf(seek -> (seek == player)||seek.getHealth()<=0.0F);
+        raiders.removeIf(seek -> (seek == player)||seek.getHealth()<=0.0F||!raid.getPlayerIds().contains(seek.getUniqueID()));
         for(ServerPlayerEntity seek: raiders)
         {
-            if(seek!=player) seek.attackEntityFrom(new DamageSource("vaultFailed").setDamageBypassesArmor().setDamageAllowedInCreativeMode(), 100000000.0F);
+            seek.attackEntityFrom(new DamageSource("vaultFailed").setDamageBypassesArmor().setDamageAllowedInCreativeMode(), 100000000.0F);
         }
-
-		VaultRaid raid = VaultRaidData.get((ServerWorld)event.getEntity().world).getAt(player.getPosition());
 		if(raid == null)return;
 		raid.finished = true;
         raid.ticksLeft=0;

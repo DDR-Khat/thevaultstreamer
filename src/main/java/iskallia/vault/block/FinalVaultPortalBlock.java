@@ -161,7 +161,7 @@ public class FinalVaultPortalBlock extends NetherPortalBlock {
                     }
 
                     VaultRaidData.get(destination).startNew(players, Collections.emptyList(),
-                            VaultRarity.OMEGA.ordinal(), playerBossName, portal.getData(), true);
+                            VaultRarity.OMEGA.ordinal(), playerBossName, portal.getData(), true,player.getUniqueID());
                 }
             });
 
