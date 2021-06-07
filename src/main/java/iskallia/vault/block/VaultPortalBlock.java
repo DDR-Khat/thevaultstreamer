@@ -198,7 +198,7 @@ public class VaultPortalBlock extends NetherPortalBlock {
                     if(ModConfigs.VAULT_COOP_ONLY.IS_COOP_ONLY){
                         List<ServerPlayerEntity> players = new ArrayList<>(world.getServer().getPlayerList().getPlayers());
                         players.removeIf(seek -> (seek.getServerWorld()!=player.getServerWorld()||(seek.getTeam()!=raiders))&&(seek!=player)); // Remove if not a raider, the person activating it, and not in the same world.
-                        VaultRaidData.get(destination).startNew(players,Collections.emptyList(), state.get(RARITY), playerBossName, portal.getData(), false);
+                        VaultRaidData.get(destination).startNew(players,Collections.emptyList(), state.get(RARITY), playerBossName, portal.getData(), false, player.getUniqueID());
                     } else {
                         VaultRaidData.get(destination).startNew(player, state.get(RARITY), playerBossName, portal.getData(), false);
                     }

@@ -35,6 +35,7 @@ public class VaultRaidData extends WorldSavedData {
     protected static final String DATA_NAME = Vault.MOD_ID + "_VaultRaid";
 
     private Map<UUID, VaultRaid> activeRaids = new HashMap<>();
+
     private int xOffset = 0;
 
     public VaultRaidData() {
@@ -67,10 +68,10 @@ public class VaultRaidData extends WorldSavedData {
     }
 
     public VaultRaid startNew(ServerPlayerEntity player, int rarity, String playerBossName, CrystalData data, boolean isFinalVault) {
-        return this.startNew(Collections.singletonList(player), Collections.emptyList(), rarity, playerBossName, data, isFinalVault);
+        return this.startNew(Collections.singletonList(player), Collections.emptyList(), rarity, playerBossName, data, isFinalVault, player.getUniqueID());
     }
 
-    public VaultRaid startNew(List<ServerPlayerEntity> players, List<ServerPlayerEntity> spectators, int rarity, String playerBossName, CrystalData data, boolean isFinalVault) {
+    public VaultRaid startNew(List<ServerPlayerEntity> players, List<ServerPlayerEntity> spectators, int rarity, String playerBossName, CrystalData data, boolean isFinalVault, UUID owner) {
         players.forEach(player -> player.sendStatusMessage(new StringTextComponent("Generating vault, please wait...").mergeStyle(TextFormatting.GREEN), true));
 
         int level = players.stream()
@@ -79,7 +80,7 @@ public class VaultRaidData extends WorldSavedData {
 
         VaultRaid raid = new VaultRaid(players, spectators, new MutableBoundingBox(
                 this.xOffset, 0, 0, this.xOffset += VaultRaid.REGION_SIZE, 256, VaultRaid.REGION_SIZE
-        ), level, rarity, playerBossName);
+        ), level, rarity, playerBossName,owner);
 
         raid.isFinalVault = isFinalVault;
 
@@ -132,12 +133,18 @@ public class VaultRaidData extends WorldSavedData {
         boolean removed = false;
 
         List<Runnable> tasks = new ArrayList<>();
+        List<UUID> tickedOwners = new ArrayList<>();
 
         for (VaultRaid raid : this.activeRaids.values()) {
             if(raid.isComplete()) {
                 raid.syncTicksLeft(world.getServer());
                 tasks.add(() -> raid.playerIds.forEach(uuid -> this.remove(world, uuid)));
                 removed = true;
+            }
+            if(!tickedOwners.contains(raid.owner))
+            {
+                raid.ticksLeft--;
+                tickedOwners.add(raid.owner);
             }
         }
 
