@@ -448,7 +448,8 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
 
             long seconds = (this.ticksLeft / 20) % 60;
             long minutes = ((this.ticksLeft / 20) / 60) % 60;
-            String duration = String.format("%02d:%02d", minutes, seconds);
+            long hrs = (((this.ticksLeft / 20) / 60) / 60) % 60;
+            String duration = String.format("%02d:%02d:%02d", hrs, minutes, seconds);
 
             StringTextComponent title = new StringTextComponent("The Vault");
             title.setStyle(Style.EMPTY.setColor(Color.fromInt(0x00_ddd01e)));
