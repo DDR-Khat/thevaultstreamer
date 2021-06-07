@@ -139,6 +139,10 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
         return this.playerIds;
     }
 
+    public List<ServerPlayerEntity> getPlayers(){
+        return this.players;
+    }
+
     public List<Spectator> getSpectators() {
         return this.spectators;
     }
