@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.server.ServerWorld;
-
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -39,25 +39,22 @@ public class VaultSpawner {
 	public void tick(ServerPlayerEntity player) {
 		if(player.world.getDimensionKey() != Vault.VAULT_KEY)return;
 		if(this.raid.ticksLeft + 15 * 20 > this.raid.sTickLeft)return;
+		List<UUID> playerUuids = this.raid.getPlayerIds();
 		this.mobs.removeIf(entity -> {
-			if(this.raid.playerIds.size()==1){
-				if(entity.getDistanceSq(player) > 24 * 24) {
-					entity.remove();
-					return true;
+			if(!entity.removed) {
+				Boolean removeMob = true;
+				for (UUID playerUUID : playerUuids) {
+					ServerPlayerEntity splayer = player.getServer().getPlayerList().getPlayerByUUID(playerUUID);
+					if (splayer != null && entity.getDistanceSq(splayer) <= 24 * 24) {
+						removeMob = false;
+					}
 				}
-			} else {
-				boolean closeToPlayer = false;
-				for(UUID playerUUID : this.raid.playerIds){
-					ServerPlayerEntity mplayer = player.server.getPlayerList().getPlayerByUUID(playerUUID);
-					if(entity.getDistanceSq(mplayer) <= 24*24)
-						closeToPlayer = true;
-				}
-				if(!closeToPlayer){
+				if (removeMob) {
 					entity.remove();
 					return true;
 				}
 			}
-			return false;
+				return false;
 		});
 		if(this.mobs.size() >= this.getMaxMobs())return;
 

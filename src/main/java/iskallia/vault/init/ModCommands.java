@@ -15,6 +15,7 @@ public class ModCommands {
 
     public static ReloadConfigsCommand RELOAD_CONFIGS;
     public static RaidCommand RAID;
+    public static RaiderCommand RAIDER;
     public static VaultLevelCommand VAULT_LEVEL;
     public static InternalCommand INTERNAL;
     public static GiveBitsCommand GIVE_BITS;
@@ -24,6 +25,7 @@ public class ModCommands {
     public static void registerCommands(CommandDispatcher<CommandSource> dispatcher, Commands.EnvironmentType env) {
         RELOAD_CONFIGS = registerCommand(ReloadConfigsCommand::new, dispatcher, env);
         RAID = registerCommand(RaidCommand::new, dispatcher, env);
+        RAIDER = registerCommand(RaiderCommand::new, dispatcher, env);
         VAULT_LEVEL = registerCommand(VaultLevelCommand::new, dispatcher, env);
         INTERNAL = registerCommand(InternalCommand::new, dispatcher, env);
         GIVE_BITS = registerCommand(GiveBitsCommand::new, dispatcher, env);

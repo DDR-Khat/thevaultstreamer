@@ -32,6 +32,7 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.network.play.server.STitlePacket;
+import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -46,7 +47,12 @@ import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+
+import static iskallia.vault.Vault.raiders;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EntityEvents {
@@ -206,10 +212,16 @@ public class EntityEvents {
 				if(count != 0) {
 					stacks.add(new ItemStack(ModItems.ETERNAL_SOUL, world.rand.nextInt(count) + 1));
 				}
-
-				ItemStack crate = VaultCrateBlock.getCrateWithLoot(ModBlocks.VAULT_CRATE, stacks);
-
-				event.getEntity().entityDropItem(crate);
+				if(ModConfigs.VAULT_COOP_ONLY.EXTRA_BOSS_CRATES) {
+                    ItemStack crate = VaultCrateBlock.getCrateWithLoot(ModBlocks.VAULT_CRATE, stacks);
+                    event.getEntity().entityDropItem(crate);
+                }
+				else {
+				    if(event.getSource().getTrueSource()==player) {
+                        ItemStack crate = VaultCrateBlock.getCrateWithLoot(ModBlocks.VAULT_CRATE, stacks);
+                        event.getEntity().entityDropItem(crate);
+                    }
+                }
 
 				FireworkRocketEntity fireworks = new FireworkRocketEntity(world, event.getEntity().getPosX(),
 						event.getEntity().getPosY(), event.getEntity().getPosZ(), new ItemStack(Items.FIREWORK_ROCKET));
@@ -288,9 +300,22 @@ public class EntityEvents {
 		if(entityLiving.world.getDimensionKey() != Vault.VAULT_KEY)return;
 
 		ServerPlayerEntity player = (ServerPlayerEntity)entityLiving;
+        Scoreboard serverBoard = Objects.requireNonNull(player.getServer()).getScoreboard();
         Vector3d position = player.getPositionVec();
 		player.getServerWorld().playSound(null, position.x, position.y, position.z,
                 ModSounds.TIMER_KILL_SFX, SoundCategory.MASTER, 0.75F, 1F);
+
+		if(raiders!=null&&raiders.getName().equals("hunters"))
+        {
+            serverBoard.removeTeam(raiders);
+            serverBoard.createTeam("hunters");
+        }
+        List<ServerPlayerEntity> raiders = new ArrayList<>(player.getServerWorld().getPlayers());
+        raiders.removeIf(seek -> (seek == player)||seek.getHealth()<=0.0F);
+        for(ServerPlayerEntity seek: raiders)
+        {
+            if(seek!=player) seek.attackEntityFrom(new DamageSource("vaultFailed").setDamageBypassesArmor().setDamageAllowedInCreativeMode(), 100000000.0F);
+        }
 
 		VaultRaid raid = VaultRaidData.get((ServerWorld)event.getEntity().world).getAt(player.getPosition());
 		if(raid == null)return;
