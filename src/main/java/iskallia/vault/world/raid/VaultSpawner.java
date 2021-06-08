@@ -15,6 +15,7 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class VaultSpawner {
 
@@ -38,12 +39,11 @@ public class VaultSpawner {
 	public void tick(ServerPlayerEntity player) {
 		if(player.world.getDimensionKey() != Vault.VAULT_KEY)return;
 		if(this.raid.ticksLeft + 15 * 20 > this.raid.sTickLeft)return;
-		List<UUID> playerUuids = this.raid.getPlayerIds();
+		List<ServerPlayerEntity> players = this.raid.getPlayers();
 		this.mobs.removeIf(entity -> {
 			if(!entity.removed) {
 				Boolean removeMob = true;
-				for (UUID playerUUID : playerUuids) {
-					ServerPlayerEntity splayer = player.getServer().getPlayerList().getPlayerByUUID(playerUUID);
+				for (ServerPlayerEntity splayer : players) {
 					if (splayer != null && entity.getDistanceSq(splayer) <= 24 * 24) {
 						removeMob = false;
 					}
@@ -55,7 +55,6 @@ public class VaultSpawner {
 			}
 				return false;
 		});
-
 		if(this.mobs.size() >= this.getMaxMobs())return;
 
 		List<BlockPos> spaces = this.getSpawningSpaces(player);

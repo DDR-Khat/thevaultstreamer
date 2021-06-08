@@ -8,10 +8,6 @@ import iskallia.vault.init.ModItems;
 import iskallia.vault.item.ItemVaultCrystal;
 import iskallia.vault.util.VectorHelper;
 import iskallia.vault.world.data.PlayerVaultAltarData;
-import java.util.List;
-import java.util.UUID;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -33,6 +29,10 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.UUID;
 
 public class VaultAltarTileEntity extends TileEntity implements ITickableTileEntity {
 
@@ -261,22 +261,29 @@ public class VaultAltarTileEntity extends TileEntity implements ITickableTileEnt
                 if (recipe != null && !recipe.getRequiredItems().isEmpty()) {
                     List<RequiredItem> items = recipe.getRequiredItems();
                     for (RequiredItem item : items) {
-                        if (item.reachedAmountRequired()) {
-                            continue;
-                        }
                         if (item.isItemEqual(stack)) {
+                            if (item.reachedAmountRequired()) {
+                                return stack;
+                            }
                             int amount = stack.getCount();
                             int excess = item.getRemainder(amount);
                             if (excess > 0) {
+                                // VanillaInventoryCodeHooks#insertItem operates in 2 modes: simulate and actual insert.
+                                // It triggers it 2 times, first time to check if it works, and second time to actually
+                                // insert items. It must be required to check if simulate is false, otherwise,
+                                // all items will be inserted twice.
                                 if (!simulate) {
                                     item.setCurrentAmount(item.getAmountRequired());
-                                    PlayerVaultAltarData.get((ServerWorld) world).markDirty();
                                 }
+                                stack.setCount(excess);
                                 return ItemHandlerHelper.copyStackWithSize(stack, excess);
                             } else {
+                                // VanillaInventoryCodeHooks#insertItem operates in 2 modes: simulate and actual insert.
+                                // It triggers it 2 times, first time to check if it works, and second time to actually
+                                // insert items. It must be required to check if simulate is false, otherwise,
+                                // all items will be inserted twice.
                                 if (!simulate) {
                                     item.addAmount(stack.getCount());
-                                    PlayerVaultAltarData.get((ServerWorld) world).markDirty();
                                 }
                                 return ItemStack.EMPTY;
                             }
