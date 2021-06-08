@@ -128,7 +128,6 @@ public class VaultRaidData extends WorldSavedData {
     }
 
     public void tick(ServerWorld world) {
-        this.activeRaids.values().forEach(vaultRaid -> vaultRaid.tick(world));
 
         boolean removed = false;
 
@@ -136,17 +135,20 @@ public class VaultRaidData extends WorldSavedData {
         List<UUID> tickedOwners = new ArrayList<>();
 
         for (VaultRaid raid : this.activeRaids.values()) {
+            if(!tickedOwners.contains(raid.owner))
+            {
+                raid.ticksLeft--;
+                raid.syncTicksLeft(world.getServer());
+                tickedOwners.add(raid.owner);
+            }
             if(raid.isComplete()) {
                 raid.syncTicksLeft(world.getServer());
                 tasks.add(() -> raid.playerIds.forEach(uuid -> this.remove(world, uuid)));
                 removed = true;
             }
-            if(!tickedOwners.contains(raid.owner))
-            {
-                raid.ticksLeft--;
-                tickedOwners.add(raid.owner);
-            }
         }
+
+        this.activeRaids.values().forEach(vaultRaid -> vaultRaid.tick(world));
 
         tasks.forEach(Runnable::run);
 
