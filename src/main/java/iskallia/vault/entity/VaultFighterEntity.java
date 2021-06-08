@@ -1,5 +1,7 @@
 package iskallia.vault.entity;
 
+import iskallia.vault.config.VaultFightersConfig;
+import iskallia.vault.init.ModConfigs;
 import iskallia.vault.world.data.VaultRaidData;
 import iskallia.vault.world.raid.VaultRaid;
 import net.minecraft.entity.EntityType;
@@ -23,17 +25,27 @@ public class VaultFighterEntity extends FighterEntity {
 	@Override
 	public ILivingEntityData onInitialSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason, ILivingEntityData spawnData, CompoundNBT dataTag) {
 		ILivingEntityData livingData = super.onInitialSpawn(world, difficulty, reason, spawnData, dataTag);
-
 		if(!this.world.isRemote) {
 			VaultRaid raid = VaultRaidData.get((ServerWorld)this.world).getAt(this.getPosition());
+			if (raid != null) {
+				String name;
+				if(!ModConfigs.VAULT_FIGHTERS.FIGHTER_LIST.isEmpty()){
+					// Choose random name from fighter list.
+					int nextFighter = world.getRandom().nextInt(ModConfigs.VAULT_FIGHTERS.FIGHTER_LIST.size());
+					name = ModConfigs.VAULT_FIGHTERS.FIGHTER_LIST.get(nextFighter);
+				} else {
+					// Use raid player name.
+					ServerPlayerEntity player = ((ServerWorld) world).getServer().getPlayerList().getPlayerByUUID(raid.playerIds.get(0));
+					name = player != null ? player.getName().getString() : "";
+				}
 
-			if(raid != null) {
-				ServerPlayerEntity player = ((ServerWorld)world).getServer().getPlayerList().getPlayerByUUID(raid.playerIds.get(0));
-				String name = player != null ? player.getName().getString() : "";
-				this.setCustomName(new StringTextComponent(name));
+				if (name == null) {
+					name = "";
+				}
+
+					this.setCustomName(new StringTextComponent(name));
+				}
 			}
-		}
-
 		return livingData;
 	}
 

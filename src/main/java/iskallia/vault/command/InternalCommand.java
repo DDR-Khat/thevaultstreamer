@@ -5,6 +5,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import iskallia.vault.config.VaultFightersConfig;
+import iskallia.vault.init.ModConfigs;
 import iskallia.vault.item.CrystalData;
 import iskallia.vault.item.ItemGiftBomb;
 import iskallia.vault.item.ItemGiftBomb.Variant;
@@ -49,6 +52,11 @@ public class InternalCommand extends Command {
                     .then(Commands.argument("actor", StringArgumentType.word())
                     .then(Commands.argument("amount", IntegerArgumentType.integer())
                     .executes(context -> receivedBitDonation(context))))
+        );
+        builder.then(
+            Commands.literal("received_sub")
+                    .then(Commands.argument("actor", StringArgumentType.word())
+                    .executes(context -> receivedSub(context)))
         );
 
         builder.then(
@@ -98,6 +106,12 @@ public class InternalCommand extends Command {
             EntityHelper.giveItem(context.getSource().asPlayer(), item);
         }
         GiveBitsCommand.dropBits(context.getSource().asPlayer(), amount);
+        return 0;
+    }
+
+    private static int receivedSub(CommandContext<CommandSource> context) throws CommandSyntaxException{
+        String actor = StringArgumentType.getString(context, "actor");
+        ModConfigs.VAULT_FIGHTERS.FIGHTER_LIST.add(actor);
         return 0;
     }
     
