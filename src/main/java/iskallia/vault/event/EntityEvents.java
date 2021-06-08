@@ -308,7 +308,8 @@ public class EntityEvents {
 		if(raiders!=null&&raiders.getName().equals("hunters"))
         {
             serverBoard.removeTeam(raiders);
-            serverBoard.createTeam("hunters");
+            raiders = serverBoard.createTeam("hunters");
+            if(!ModConfigs.VAULT_COOP_ONLY.RAIDER_FRIENDLYFIRE)raiders.setAllowFriendlyFire(false);
         }
         VaultRaid raid = VaultRaidData.get(player.getServerWorld()).getActiveFor(player);
         List<ServerPlayerEntity> raiders = new ArrayList<>(player.getServerWorld().getPlayers());
