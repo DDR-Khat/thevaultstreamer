@@ -10,6 +10,11 @@ The commands are -
     
     /the_vault internal received_sub actor
     
-    /the_vault internal raffle actor
+New commands are -
 
-Received sub only adds sub fighters to the vault - no arena code has been added.
+    /the_vault internal raffle actor *
+    
+    /the_vault raider
+    
+
+*Received sub only adds sub fighters to the vault - no arena code has been added.
