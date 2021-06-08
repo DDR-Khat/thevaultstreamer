@@ -1,6 +1,7 @@
 package iskallia.vault;
 
 import iskallia.vault.init.ModCommands;
+import iskallia.vault.init.ModConfigs;
 import iskallia.vault.init.ModFeatures;
 import iskallia.vault.world.data.PlayerAbilitiesData;
 import iskallia.vault.world.data.PlayerResearchesData;
@@ -81,6 +82,7 @@ public class Vault {
         if(!teamExists)
         {
             raiders = event.getServer().getScoreboard().createTeam("hunters");
+            if(!ModConfigs.VAULT_COOP_ONLY.RAIDER_FRIENDLYFIRE)raiders.setAllowFriendlyFire(false);
         }
 
     }

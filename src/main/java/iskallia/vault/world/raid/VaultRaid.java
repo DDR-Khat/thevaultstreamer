@@ -46,6 +46,7 @@ import net.minecraftforge.fml.network.NetworkDirection;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -210,17 +211,17 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
 
     private void onFinishRaid(ServerWorld world) {
         this.finished = true;
+        AtomicReference<Float> range = new AtomicReference<>((float) 0);
+        AtomicReference<Float> tnl = new AtomicReference<>((float) 0);
+        if (ModConfigs.VAULT_COOP_ONLY.VAULT_EXP_EQUAL) {
+            range.set(ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MAX - ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN);
+            tnl.set(ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN + world.rand.nextFloat() * range.get());
+        }
 
         Scoreboard serverBoard = world.getServer().getScoreboard();
 
         this.runForAll(world.getServer(), player -> {
             if(player.getHealth()>=1) {
-                float range;
-                float tnl = 0;
-                if (ModConfigs.VAULT_COOP_ONLY.VAULT_EXP_EQUAL) {
-                    range = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MAX - ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN;
-                    tnl = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN + world.rand.nextFloat() * range;
-                }
                 if (!player.removed && player.world.getDimensionKey() == Vault.VAULT_KEY) {
                     this.teleportToStart(world, player);
                 }
@@ -231,19 +232,20 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
 
                 if (!player.removed && !list.contains(player.getUniqueID())) {
                     if (!ModConfigs.VAULT_COOP_ONLY.VAULT_EXP_EQUAL) {
-                        range = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MAX - ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN;
-                        tnl = ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN + world.rand.nextFloat() * range;
+                        range.set(ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MAX - ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN);
+                        tnl.set(ModConfigs.VAULT_GENERAL.VAULT_EXIT_TNL_MIN + world.rand.nextFloat() * range.get());
                     }
 
                     PlayerVaultStatsData statsData = PlayerVaultStatsData.get(world);
                     PlayerVaultStats stats = statsData.getVaultStats(player);
-                    statsData.addVaultExp(player, (int) (stats.getTnl() * tnl));
+                    statsData.addVaultExp(player, (int) (stats.getTnl() * tnl.get()));
                 }
             }
             if(raiders!=null&&raiders.getName().equals("hunters"))
             {
                 serverBoard.removeTeam(raiders);
-                serverBoard.createTeam("hunters");
+                raiders = serverBoard.createTeam("hunters");
+                if(!ModConfigs.VAULT_COOP_ONLY.RAIDER_FRIENDLYFIRE)raiders.setAllowFriendlyFire(false);
             }
         });
 
