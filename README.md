@@ -8,6 +8,13 @@ The commands are -
     
     /the_vault internal received_donation actor Amount
     
-    /the_vault internal raffle actor
+    /the_vault internal received_sub actor
+    
+New commands are -
 
-The final missing command is received_sub which currently can't be implemented as the Arena source code is not available in the public release.
+    /the_vault internal raffle actor *
+    
+    /the_vault raider
+    
+
+*Received sub only adds sub fighters to the vault - no arena code has been added.
