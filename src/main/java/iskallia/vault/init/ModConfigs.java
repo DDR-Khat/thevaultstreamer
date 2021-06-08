@@ -57,6 +57,7 @@ public class ModConfigs {
     public static PlayerExpConfig PLAYER_EXP;
     public static FinalVaultGeneralConfig FINAL_VAULT_GENERAL;
     public static VaultCoopOnlyConfig VAULT_COOP_ONLY;
+    public static VaultStreamerConfig VAULT_STREAMER_CONFIG;
 
     public static void register() {
         ABILITIES = (AbilitiesConfig) new AbilitiesConfig().readConfig();
@@ -108,6 +109,7 @@ public class ModConfigs {
         PLAYER_EXP = (PlayerExpConfig) new PlayerExpConfig().readConfig();
         FINAL_VAULT_GENERAL = (FinalVaultGeneralConfig) new FinalVaultGeneralConfig().readConfig();
         VAULT_COOP_ONLY = (VaultCoopOnlyConfig) new VaultCoopOnlyConfig().readConfig();
+        VAULT_STREAMER_CONFIG = (VaultStreamerConfig) new VaultStreamerConfig().readConfig();
         Vault.LOGGER.info("Vault Configs are loaded successfully!");
     }
 
