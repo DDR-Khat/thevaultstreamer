@@ -39,13 +39,13 @@ import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.network.NetworkDirection;
 
 import java.util.Optional;
 import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import static iskallia.vault.Vault.raiders;
 
@@ -195,9 +195,13 @@ public class VaultPortalBlock extends NetherPortalBlock {
                         this.moveToSpawn(destination, player);
                     }
                 } else if(worldKey == Vault.VAULT_KEY) {
-                    if(ModConfigs.VAULT_COOP_ONLY.IS_COOP_ONLY){
-                        List<ServerPlayerEntity> players = new ArrayList<>(world.getServer().getPlayerList().getPlayers());
-                        players.removeIf(seek -> (seek.getServerWorld()!=player.getServerWorld()||(seek.getTeam()!=raiders))&&(seek!=player)); // Remove if not a raider, the person activating it, and not in the same world.
+                    if(ModConfigs.VAULT_COOP_ONLY.IS_COOP_ONLY&&!player.getTeam().getMembershipCollection().isEmpty()){
+                        Collection<String> teamMembers = player.getTeam().getMembershipCollection();
+                        List<ServerPlayerEntity> players = new ArrayList<>();
+                        for(String member : teamMembers){
+                            players.add(world.getServer().getPlayerList().getPlayerByUsername(member));
+                        }
+                        players.removeIf(seek -> (seek.getServerWorld()!=player.getServerWorld()||seek==player)); // Remove if the person activating it, or not in the same world.
                         VaultRaidData.get(destination).startNew(players,Collections.emptyList(), state.get(RARITY), playerBossName, portal.getData(), false, player.getUniqueID());
                     } else {
                         VaultRaidData.get(destination).startNew(player, state.get(RARITY), playerBossName, portal.getData(), false);
