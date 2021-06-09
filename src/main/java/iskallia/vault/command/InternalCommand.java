@@ -36,7 +36,7 @@ public class InternalCommand extends Command {
         builder.then(
                 Commands.literal("received_sub")
                         .then(Commands.argument("actor", StringArgumentType.word())
-                            .then(Commands.argument("months", IntegerArgumentType.word())
+                            .then(Commands.argument("months", IntegerArgumentType.integer())
                                         .executes(InternalCommand::receivedSub)))
         );
         builder.then(
