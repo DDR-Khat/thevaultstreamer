@@ -5,7 +5,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import iskallia.vault.config.VaultFightersConfig;
 import iskallia.vault.init.ModConfigs;
 import iskallia.vault.item.CrystalData;
 import iskallia.vault.item.ItemGiftBomb;
@@ -94,7 +93,7 @@ public class InternalCommand extends Command {
     private static int receivedDonation(CommandContext<CommandSource> context) throws CommandSyntaxException {
         String actor = StringArgumentType.getString(context, "actor");
         int amount = IntegerArgumentType.getInteger(context,"amount");
-        boolean isMegaHead = amount >= 100;
+        boolean isMegaHead = amount >= ModConfigs.VAULT_STREAMER_CONFIG.DONOR_MEGA_HEAD;
         CoreType corerare = CoreType.COMMON;
         if(amount >= ModConfigs.VAULT_STREAMER_CONFIG.DONOR_TRADER_BRACKETS.get(0)){
             if(ModConfigs.VAULT_STREAMER_CONFIG.DONOR_TRADER_BRACKETS.get(1)!=-1&&(amount>=ModConfigs.VAULT_STREAMER_CONFIG.DONOR_TRADER_BRACKETS.get(1)&&amount<=ModConfigs.VAULT_STREAMER_CONFIG.DONOR_TRADER_BRACKETS.get(2))) corerare = CoreType.RARE;
