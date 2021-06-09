@@ -36,7 +36,8 @@ public class InternalCommand extends Command {
         builder.then(
                 Commands.literal("received_sub")
                         .then(Commands.argument("actor", StringArgumentType.word())
-                                        .executes(InternalCommand::receivedSub))
+                            .then(Commands.argument("months", StringArgumentType.word())
+                                        .executes(InternalCommand::receivedSub)))
         );
         builder.then(
                 Commands.literal("received_sub_gift")
@@ -73,7 +74,7 @@ public class InternalCommand extends Command {
     private static int receivedSubGift(CommandContext<CommandSource> context) throws CommandSyntaxException {
         String actor = StringArgumentType.getString(context, "actor");
         int amount = IntegerArgumentType.getInteger(context,"amount");
-        int tier = IntegerArgumentType.getInteger(context,"tier");
+        //int tier = IntegerArgumentType.getInteger(context,"tier");
         int variant = 0;
         if(amount >= ModConfigs.VAULT_STREAMER_CONFIG.GIFT_SUB_BRACKETS.get(0))
         {
@@ -125,6 +126,7 @@ public class InternalCommand extends Command {
 
     private static int receivedSub(CommandContext<CommandSource> context) throws CommandSyntaxException{
         String actor = StringArgumentType.getString(context, "actor");
+        //Integer months = IntegerArgumentType.getInteger(context, "months");
         ModConfigs.VAULT_FIGHTERS.FIGHTER_LIST.add(actor);
         return 0;
     }
