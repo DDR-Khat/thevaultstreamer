@@ -2,6 +2,9 @@
 /media
 /tools
 
+# vscode
+settings.json
+
 # eclipse
 bin
 *.launch
