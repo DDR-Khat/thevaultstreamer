@@ -36,8 +36,7 @@ public class InternalCommand extends Command {
         builder.then(
                 Commands.literal("received_sub")
                         .then(Commands.argument("actor", StringArgumentType.word())
-                                .then(Commands.argument("tier", IntegerArgumentType.integer(0,3))
-                                        .executes(InternalCommand::receivedSub)))
+                                        .executes(InternalCommand::receivedSub))
         );
         builder.then(
                 Commands.literal("received_sub_gift")
@@ -88,35 +87,6 @@ public class InternalCommand extends Command {
             EntityHelper.giveItem(context.getSource().asPlayer(), item);
         }
         if(ModConfigs.VAULT_STREAMER_CONFIG.GIFT_SUBS_GIVE_BITS) GiveBitsCommand.dropBits(context.getSource().asPlayer(), amount*500);
-        return 0;
-    }
-
-    private static int receivedSub(CommandContext<CommandSource> context) throws CommandSyntaxException {
-        String actor = StringArgumentType.getString(context, "actor");
-        int amount = 0;
-        int tier = IntegerArgumentType.getInteger(context,"tier");
-        int variant = 0;
-        boolean GiveTrader = ModConfigs.VAULT_STREAMER_CONFIG.SUBS_GIVE_TRADER;
-        boolean GiveBits = ModConfigs.VAULT_STREAMER_CONFIG.SUBS_GIVE_BITS;
-        boolean Rarity = ModConfigs.VAULT_STREAMER_CONFIG.SUB_BRACKET_AS_RARITY;
-        CoreType corerare = CoreType.COMMON;
-        if(tier<2&&GiveBits) amount = 500;
-        if(tier==2)
-        {
-            if(GiveBits) amount = 1000;
-            if(Rarity) corerare = CoreType.RARE;
-        }
-        if(tier==3)
-        {
-            if(GiveBits) amount = 2500;
-            if(Rarity) corerare = CoreType.OMEGA;
-        }
-        boolean isMegaHead = amount >= 2500;
-        if(GiveTrader) {
-            ItemStack item = ItemTraderCore.generate(actor, amount, isMegaHead, corerare);
-            EntityHelper.giveItem(context.getSource().asPlayer(), item);
-        }
-        GiveBitsCommand.dropBits(context.getSource().asPlayer(), amount);
         return 0;
     }
 
