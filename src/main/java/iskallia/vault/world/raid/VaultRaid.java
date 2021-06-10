@@ -245,6 +245,7 @@ public class VaultRaid implements INBTSerializable<CompoundNBT> {
             {
                 serverBoard.removeTeam(raiders);
                 raiders = serverBoard.createTeam("hunters");
+                raiders.setColor(TextFormatting.GREEN);
                 if(!ModConfigs.VAULT_COOP_ONLY.RAIDER_FRIENDLYFIRE)raiders.setAllowFriendlyFire(false);
             }
         });

@@ -309,6 +309,7 @@ public class EntityEvents {
         {
             serverBoard.removeTeam(raiders);
             raiders = serverBoard.createTeam("hunters");
+            raiders.setColor(TextFormatting.GREEN);
             if(!ModConfigs.VAULT_COOP_ONLY.RAIDER_FRIENDLYFIRE)raiders.setAllowFriendlyFire(false);
         }
         VaultRaid raid = VaultRaidData.get(player.getServerWorld()).getActiveFor(player);

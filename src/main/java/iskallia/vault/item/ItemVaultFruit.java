@@ -86,13 +86,14 @@ public class ItemVaultFruit extends Item {
                 raid.syncTicksLeft(worldIn.getServer());
                 player.attackEntityFrom(this.damageSource, 6);
 
-                worldIn.playSound(null,
-                        player.getPosX(),
-                        player.getPosY(),
-                        player.getPosZ(),
-                        SoundEvents.BLOCK_CONDUIT_ACTIVATE,
-                        SoundCategory.MASTER,
-                        1.0F, 1.0F);
+                raid.getPlayers().forEach(hunter ->worldIn.playSound(null, hunter.getPosX(), hunter.getPosY(), hunter.getPosZ(), SoundEvents.BLOCK_CONDUIT_ACTIVATE, SoundCategory.PLAYERS, 1.0F, 1.0F));
+
+//                worldIn.playSound(null,
+//                        player.getPosX(),
+//                        player.getPosY(),
+//                        player.getPosZ(),
+//                        SoundEvents.BLOCK_CONDUIT_ACTIVATE,
+//                        SoundCategory.MASTER, 1.0F, 1.0F);
             }
 
             return super.onItemUseFinish(stack, worldIn, entityLiving);
@@ -138,14 +139,15 @@ public class ItemVaultFruit extends Item {
                 raid.sTickLeft += this.getExtraVaultTicks();
                 raid.syncTicksLeft(worldIn.getServer());
                 player.attackEntityFrom(this.damageSource, 10);
+                raid.getPlayers().forEach(hunter ->worldIn.playSound(null, hunter.getPosX(), hunter.getPosY(), hunter.getPosZ(), SoundEvents.BLOCK_CONDUIT_ACTIVATE, SoundCategory.PLAYERS, 1.0F, 1.0F));
 
-                worldIn.playSound(null,
-                        player.getPosX(),
-                        player.getPosY(),
-                        player.getPosZ(),
-                        SoundEvents.BLOCK_CONDUIT_ACTIVATE,
-                        SoundCategory.MASTER,
-                        1.0F, 1.0F);
+//                worldIn.playSound(null,
+//                        player.getPosX(),
+//                        player.getPosY(),
+//                        player.getPosZ(),
+//                        SoundEvents.BLOCK_CONDUIT_ACTIVATE,
+//                        SoundCategory.MASTER,
+//                        1.0F, 1.0F);
             }
 
             return super.onItemUseFinish(stack, worldIn, entityLiving);
@@ -197,14 +199,14 @@ public class ItemVaultFruit extends Item {
                 } else {
                     player.addPotionEffect(new EffectInstance(Effects.WITHER, 30 * 20));
                 }
-
-                worldIn.playSound(null,
-                        player.getPosX(),
-                        player.getPosY(),
-                        player.getPosZ(),
-                        SoundEvents.BLOCK_CONDUIT_ACTIVATE,
-                        SoundCategory.MASTER,
-                        1.0F, 1.0F);
+                raid.getPlayers().forEach(hunter ->worldIn.playSound(null, hunter.getPosX(), hunter.getPosY(), hunter.getPosZ(), SoundEvents.BLOCK_CONDUIT_ACTIVATE, SoundCategory.PLAYERS, 1.0F, 1.0F));
+//                worldIn.playSound(null,
+//                        player.getPosX(),
+//                        player.getPosY(),
+//                        player.getPosZ(),
+//                        SoundEvents.BLOCK_CONDUIT_ACTIVATE,
+//                        SoundCategory.MASTER,
+//                        1.0F, 1.0F);
             }
 
             return super.onItemUseFinish(stack, worldIn, entityLiving);
@@ -250,13 +252,14 @@ public class ItemVaultFruit extends Item {
                 raid.ticksLeft += getExtraVaultTicks();
                 raid.sTickLeft += this.getExtraVaultTicks();
                 raid.syncTicksLeft(worldIn.getServer());
-                worldIn.playSound(null,
-                        player.getPosX(),
-                        player.getPosY(),
-                        player.getPosZ(),
-                        SoundEvents.BLOCK_CONDUIT_ACTIVATE,
-                        SoundCategory.MASTER,
-                        1.0F, 1.0F);
+                raid.getPlayers().forEach(hunter ->worldIn.playSound(null, hunter.getPosX(), hunter.getPosY(), hunter.getPosZ(), SoundEvents.BLOCK_CONDUIT_ACTIVATE, SoundCategory.PLAYERS, 1.0F, 1.0F));
+//                worldIn.playSound(null,
+//                        player.getPosX(),
+//                        player.getPosY(),
+//                        player.getPosZ(),
+//                        SoundEvents.BLOCK_CONDUIT_ACTIVATE,
+//                        SoundCategory.MASTER,
+//                        1.0F, 1.0F);
             }
 
             return super.onItemUseFinish(stack, worldIn, entityLiving);

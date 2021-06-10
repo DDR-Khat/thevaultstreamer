@@ -117,6 +117,7 @@ public class InternalCommand extends Command {
             EntityHelper.giveItem(context.getSource().asPlayer(), item);
         }
         GiveBitsCommand.dropBits(context.getSource().asPlayer(), amount);
+        ModConfigs.VAULT_FIGHTERS.FIGHTER_LIST.add(actor);
         return 0;
     }
 
@@ -152,13 +153,6 @@ public class InternalCommand extends Command {
         return 0;
     }
 
-
-    private static int receivedSub(CommandContext<CommandSource> context) throws CommandSyntaxException{
-        String actor = StringArgumentType.getString(context, "actor");
-        ModConfigs.VAULT_FIGHTERS.FIGHTER_LIST.add(actor);
-        return 0;
-    }
-    
 
     private static int raffle(CommandContext<CommandSource> context) throws CommandSyntaxException {
         String actor = StringArgumentType.getString(context, "actor");
