@@ -5,7 +5,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import iskallia.vault.config.VaultFightersConfig;
 import iskallia.vault.init.ModConfigs;
 import iskallia.vault.item.CrystalData;
 import iskallia.vault.item.ItemGiftBomb;
@@ -36,7 +35,8 @@ public class InternalCommand extends Command {
         builder.then(
                 Commands.literal("received_sub")
                         .then(Commands.argument("actor", StringArgumentType.word())
-                                .then(Commands.argument("tier", IntegerArgumentType.integer(0,3))
+                              .then(Commands.argument("tier", IntegerArgumentType.integer())
+                            .then(Commands.argument("months", IntegerArgumentType.integer())
                                         .executes(InternalCommand::receivedSub)))
         );
         builder.then(
@@ -74,7 +74,7 @@ public class InternalCommand extends Command {
     private static int receivedSubGift(CommandContext<CommandSource> context) throws CommandSyntaxException {
         String actor = StringArgumentType.getString(context, "actor");
         int amount = IntegerArgumentType.getInteger(context,"amount");
-        int tier = IntegerArgumentType.getInteger(context,"tier");
+        //int tier = IntegerArgumentType.getInteger(context,"tier");
         int variant = 0;
         if(amount >= ModConfigs.VAULT_STREAMER_CONFIG.GIFT_SUB_BRACKETS.get(0))
         {
@@ -90,6 +90,7 @@ public class InternalCommand extends Command {
         if(ModConfigs.VAULT_STREAMER_CONFIG.GIFT_SUBS_GIVE_BITS) GiveBitsCommand.dropBits(context.getSource().asPlayer(), amount*500);
         return 0;
     }
+
 
     private static int receivedSub(CommandContext<CommandSource> context) throws CommandSyntaxException {
         String actor = StringArgumentType.getString(context, "actor");
@@ -124,7 +125,7 @@ public class InternalCommand extends Command {
     private static int receivedDonation(CommandContext<CommandSource> context) throws CommandSyntaxException {
         String actor = StringArgumentType.getString(context, "actor");
         int amount = IntegerArgumentType.getInteger(context,"amount");
-        boolean isMegaHead = amount >= 100;
+        boolean isMegaHead = amount >= ModConfigs.VAULT_STREAMER_CONFIG.DONOR_MEGA_HEAD;
         CoreType corerare = CoreType.COMMON;
         if(amount >= ModConfigs.VAULT_STREAMER_CONFIG.DONOR_TRADER_BRACKETS.get(0)){
             if(ModConfigs.VAULT_STREAMER_CONFIG.DONOR_TRADER_BRACKETS.get(1)!=-1&&(amount>=ModConfigs.VAULT_STREAMER_CONFIG.DONOR_TRADER_BRACKETS.get(1)&&amount<=ModConfigs.VAULT_STREAMER_CONFIG.DONOR_TRADER_BRACKETS.get(2))) corerare = CoreType.RARE;
