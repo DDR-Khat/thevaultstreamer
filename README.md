@@ -8,7 +8,7 @@ The commands are -
     
     /the_vault internal received_donation actor Amount
     
-    /the_vault internal received_sub actor
+    /the_vault internal received_sub actor tier months
     
 New commands are -
 
