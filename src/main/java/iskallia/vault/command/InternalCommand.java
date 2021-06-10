@@ -35,9 +35,9 @@ public class InternalCommand extends Command {
         builder.then(
                 Commands.literal("received_sub")
                         .then(Commands.argument("actor", StringArgumentType.word())
-                              .then(Commands.argument("tier", IntegerArgumentType.integer())
-                            .then(Commands.argument("months", IntegerArgumentType.integer())
-                                        .executes(InternalCommand::receivedSub))))
+                                .then(Commands.argument("tier", IntegerArgumentType.integer())
+                                        .then(Commands.argument("months", IntegerArgumentType.integer())
+                                                .executes(InternalCommand::receivedSub))))
         );
         builder.then(
                 Commands.literal("received_sub_gift")
