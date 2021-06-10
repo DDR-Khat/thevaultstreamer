@@ -59,12 +59,6 @@ public class InternalCommand extends Command {
                                         .executes(InternalCommand::receivedBitDonation)))
         );
         builder.then(
-            Commands.literal("received_sub")
-                    .then(Commands.argument("actor", StringArgumentType.word())
-                    .executes(context -> receivedSub(context)))
-        );
-
-        builder.then(
                 Commands.literal("raffle")
                         .then(Commands.argument("actor", StringArgumentType.word())
                                 .executes(InternalCommand::raffle))
