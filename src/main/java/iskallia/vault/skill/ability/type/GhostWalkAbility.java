@@ -44,8 +44,8 @@ public class GhostWalkAbility extends EffectAbility {
         }
 
         player.world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(),
-                ModSounds.GHOST_WALK_SFX, SoundCategory.MASTER, 0.7f, 1f);
-        player.playSound(ModSounds.GHOST_WALK_SFX, SoundCategory.MASTER, 0.7f, 1f);
+                ModSounds.GHOST_WALK_SFX, SoundCategory.PLAYERS, 0.7f, 1f);
+        player.playSound(ModSounds.GHOST_WALK_SFX, SoundCategory.PLAYERS, 0.7f, 1f);
     }
 
     @Override

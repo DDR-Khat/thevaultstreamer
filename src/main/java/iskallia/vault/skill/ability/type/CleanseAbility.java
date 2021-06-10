@@ -26,8 +26,8 @@ public class CleanseAbility extends PlayerAbility {
         effects.forEach(player::removePotionEffect);
 
         player.world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(),
-                ModSounds.CLEANSE_SFX, SoundCategory.MASTER, 0.7f, 1f);
-        player.playSound(ModSounds.CLEANSE_SFX, SoundCategory.MASTER, 0.7f, 1f);
+                ModSounds.CLEANSE_SFX, SoundCategory.PLAYERS, 0.7f, 1f);
+        player.playSound(ModSounds.CLEANSE_SFX, SoundCategory.PLAYERS, 0.7f, 1f);
     }
 
 }

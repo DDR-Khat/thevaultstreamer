@@ -70,7 +70,7 @@ public class ExecuteAbility extends EffectAbility {
                 player.getPosY(),
                 player.getPosZ(),
                 SoundEvents.ENTITY_EVOKER_CAST_SPELL,
-                SoundCategory.MASTER,
+                SoundCategory.PLAYERS,
                 1F, 1F
         );
 

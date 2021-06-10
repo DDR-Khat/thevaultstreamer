@@ -39,7 +39,7 @@ public class MegaJumpAbility extends PlayerAbility {
 
         player.velocityChanged = true;
 
-        player.playSound(ModSounds.MEGA_JUMP_SFX, SoundCategory.MASTER, 0.7f, 1f);
+        player.playSound(ModSounds.MEGA_JUMP_SFX, SoundCategory.PLAYERS, 0.7f, 1f);
         ((ServerWorld) player.world).spawnParticle(ParticleTypes.POOF,
                 player.getPosX(), player.getPosY(), player.getPosZ(),
                 50, 1D, 0.5D, 1D, 0.0D);

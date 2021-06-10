@@ -75,7 +75,7 @@ public class ParryTalent extends PlayerTalent {
                     player.getPosY(),
                     player.getPosZ(),
                     SoundEvents.ITEM_SHIELD_BLOCK,
-                    SoundCategory.MASTER,
+                    SoundCategory.PLAYERS,
                     1F, 1F
             );
 

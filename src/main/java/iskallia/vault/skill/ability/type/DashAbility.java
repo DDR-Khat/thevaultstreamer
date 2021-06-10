@@ -72,14 +72,14 @@ public class DashAbility extends PlayerAbility {
 
         if (GrasshopperNinja.isGrasshopperShape(player)) {
             player.world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(),
-                    ModSounds.GRASSHOPPER_BRRR, SoundCategory.MASTER, 1f, 1f);
-            player.playSound(ModSounds.GRASSHOPPER_BRRR, SoundCategory.MASTER, 1f, 1f);
+                    ModSounds.GRASSHOPPER_BRRR, SoundCategory.PLAYERS, 1f, 1f);
+            player.playSound(ModSounds.GRASSHOPPER_BRRR, SoundCategory.PLAYERS, 1f, 1f);
             GrasshopperNinja.achieve((ServerPlayerEntity) player);
 
         } else {
             player.world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(),
-                    ModSounds.DASH_SFX, SoundCategory.MASTER, 1f, 1f);
-            player.playSound(ModSounds.DASH_SFX, SoundCategory.MASTER, 1f, 1f);
+                    ModSounds.DASH_SFX, SoundCategory.PLAYERS, 1f, 1f);
+            player.playSound(ModSounds.DASH_SFX, SoundCategory.PLAYERS, 1f, 1f);
         }
 
     }

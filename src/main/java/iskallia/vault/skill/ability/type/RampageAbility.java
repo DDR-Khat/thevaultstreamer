@@ -42,8 +42,8 @@ public class RampageAbility extends EffectAbility {
         }
 
         player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(),
-                    ModSounds.RAMPAGE_SFX, SoundCategory.MASTER, 0.7f * 0.25f, 1f);
-        player.playSound(ModSounds.RAMPAGE_SFX, SoundCategory.MASTER, 0.7f * 0.25f, 1f);
+                    ModSounds.RAMPAGE_SFX, SoundCategory.PLAYERS, 0.7f * 0.25f, 1f);
+        player.playSound(ModSounds.RAMPAGE_SFX, SoundCategory.PLAYERS, 0.7f * 0.25f, 1f);
     }
 
     @Override

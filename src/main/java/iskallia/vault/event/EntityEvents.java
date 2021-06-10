@@ -234,7 +234,7 @@ public class EntityEvents {
 
 				raid.won = true;
 				raid.ticksLeft = 20 * 20;
-				world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.MASTER, 1.0F, 1.0F);
+				world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 				StringTextComponent title = new StringTextComponent("Vault Cleared!");
 				title.setStyle(Style.EMPTY.setColor(Color.fromInt(0x00_ddd01e)));
@@ -303,7 +303,7 @@ public class EntityEvents {
         Scoreboard serverBoard = Objects.requireNonNull(player.getServer()).getScoreboard();
         Vector3d position = player.getPositionVec();
 		player.getServerWorld().playSound(null, position.x, position.y, position.z,
-                ModSounds.TIMER_KILL_SFX, SoundCategory.MASTER, 0.75F, 1F);
+                ModSounds.TIMER_KILL_SFX, SoundCategory.PLAYERS, 0.75F, 1F);
 
 		if(raiders!=null&&raiders.getName().equals("hunters"))
         {
@@ -339,7 +339,7 @@ public class EntityEvents {
 		if(raid.isFinalVault) {
 			if(player.getHealth() - event.getAmount() <= 0) {
 				player.getServerWorld().playSound(null, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(),
-						ModSounds.TIMER_KILL_SFX, SoundCategory.MASTER, 0.75F, 1F);
+						ModSounds.TIMER_KILL_SFX, SoundCategory.PLAYERS, 0.75F, 1F);
 				event.setCanceled(true);
 
 				IFormattableTextComponent text = new StringTextComponent("");
